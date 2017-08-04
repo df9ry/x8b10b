@@ -24,40 +24,17 @@
 
 #undef _TRACE
 
-static inline void _8b_2_10b(uint8_t u8b, uint16_t *p10b, int *rd)
+static inline void _8b_2_10b(uint8_t u8b, uint16_t *p10b)
 {
 	uint16_t abcdeifghj;
 	uint8_t  abcdei, fghj, x, y;
 
 	x = u8b & ((1<<5)-1); /* 5 bit */
-	abcdei = x5b6b[x];
-	if (abcdei & (1<<7)) /*RD sensible*/ {
-		if (*rd < 0)
-			abcdei = ~abcdei;
-		abcdei = abcdei & ((1<<6)-1);
-	}
-
 	y = (u8b >> 5) & ((1<<3)-1); /* 3 bit */
-	if (y == 7) { // Special case:
-		if (*rd < 0) {
-			if ((y == 17) || (x == 18) || (x = 20))
-				y = 8;
-		} else {
-			if ((y == 11) || (x == 13) || (x = 14))
-				y = 8;
-		}
-	}
+	abcdei = x5b6b[x];
+	if ((y == 7) && ((x == 17) || (x == 18) || (x = 20)))
+			y = 8;
 	fghj = x3b4b[y];
-	if (fghj & (1<<7)) /*RD sensible*/ {
-		if (*rd < 0) {
-			fghj = ~fghj;
-			*rd = +1;
-		} else {
-			*rd = -1;
-		}
-		fghj = fghj & ((1<<4)-1);
-	}
-
 	abcdeifghj = (abcdei << 4) | fghj;
 #ifdef _TRACE
 	printf("_8b_2_10b: abcdei=%02x / ", abcdei);
@@ -91,11 +68,11 @@ static inline int _10b_2_8b(uint16_t u10b, uint8_t *p8b)
 int x8b10b(uint8_t *pb_in,  size_t cb_in, uint8_t *pb_out, size_t cb_out)
 {
 	uint16_t abcdeifghj, u10;
-	int rd = -1, n_bits = 0, result = 0;
+	int n_bits = 0, result = 0;
 
 	u10 = 0x0000;
 	while (cb_in != 0) {
-		_8b_2_10b(*pb_in, &abcdeifghj, &rd); ++pb_in; --cb_in;
+		_8b_2_10b(*pb_in, &abcdeifghj); ++pb_in; --cb_in;
 		u10 = u10 | (abcdeifghj << n_bits); n_bits += 10;
 		while (n_bits >= 8) {
 			if (cb_out == 0)
