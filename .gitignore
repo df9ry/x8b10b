@@ -54,3 +54,4 @@ Module.symvers
 Mkfile.old
 dkms.conf
 >>>>>>> refs/remotes/origin/master
+/Release/

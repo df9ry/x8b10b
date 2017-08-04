@@ -16,16 +16,34 @@
  *    along with Daisy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DUMP_H_
-#define DUMP_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 
-#define dump_bin_lsb(F,P,C) dump_bin(F,P,C,0)
-#define dump_bin_msb(F,P,C) dump_bin(F,P,C,1)
+#include "dc_check.h"
 
-#include <inttypes.h>
+int dc_check(const uint8_t *pb, uint32_t cb, int msb) {
+	int last_bit = 0, count_bit = 0, max_sequ = 0, k, bit = 0;
 
-/* Fast dump in a nice format: */
-extern void dump_hex(FILE *file, const uint8_t *pb, uint32_t cb);
-extern void dump_bin(FILE *file, const uint8_t *pb, uint32_t cb, int msb);
+	while (cb-- != 0) {
+		uint8_t x = *pb++;
 
-#endif /* DUMP_H_ */
+		for (k = 0; k < 8; ++k) {
+			if (msb)
+				bit = ((x & ((1 << (7-k)))) != 0x00);
+			else
+				bit = ((x & ((1 << k))) != 0x00);
+
+			if (bit == last_bit) {
+				++count_bit;
+				if (count_bit > max_sequ)
+					max_sequ = count_bit;
+			} else {
+				last_bit = bit;
+				count_bit = 1;
+			}
+		} // end for //
+	} // end while //
+	return max_sequ;
+}

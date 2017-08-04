@@ -1,8 +1,19 @@
-/*
- * x8b10b_tables.h
+/* Copyright 2017 Tania Hagn.
  *
- *  Created on: 02.08.2017
- *      Author: tania
+ * This file is part of x8b10b.
+ *
+ *    Daisy is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    Daisy is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with Daisy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef X8B10B_TABLES_H_
@@ -73,14 +84,14 @@ static const uint8_t x6b5b[64] = {
 };
 
 static const uint8_t x4b3b[16] = {
-	/*00*/ 0xff, /**Not assigned***/ /*01*/ 0x07, /*11101110:D.x.P7*/
-	/*02*/ 0x04, /*10001101:D.x.4**/ /*03*/ 0x03, /*10001100:D.x.3**/
-	/*04*/ 0x00, /*10001011:D.x.0**/ /*05*/ 0x02, /*00000101:D.x.2**/
-	/*06*/ 0x06, /*00000110:D.x.6**/ /*07*/ 0x07, /*11110111:D.x.A7*/
-	/*08*/ 0x07, /*11110111:D.x.A7*/ /*09*/ 0x01, /*00001001:D.x.1**/
-	/*0a*/ 0x05, /*00001010:D.x.5**/ /*0b*/ 0x00, /*10001011:D.x.0**/
-	/*0c*/ 0x03, /*10001100:D.x.3**/ /*0d*/ 0x04, /*10001101:D.x.4**/
-	/*0e*/ 0x07, /*11101110:D.x.P7*/ /*0f*/ 0xff, /**Not assigned***/
+	/*00*/ 0xff, /**Not assigned***//*01*/ 0x07, /*10001110:D.x.P7*/
+	/*02*/ 0x04, /*10001101:D.x.4**//*03*/ 0x03, /*10001100:D.x.3**/
+	/*04*/ 0x00, /*10001011:D.x.0**//*05*/ 0x02, /*00000101:D.x.2**/
+	/*06*/ 0x06, /*00000110:D.x.6**//*07*/ 0x07, /*10000111:D.x.A7*/
+	/*08*/ 0x07, /*10000111:D.x.A7*//*09*/ 0x01, /*00001001:D.x.1**/
+	/*0a*/ 0x05, /*00001010:D.x.5**//*0b*/ 0x00, /*10001011:D.x.0**/
+	/*0c*/ 0x03, /*10001100:D.x.3**//*0d*/ 0x04, /*10001101:D.x.4**/
+	/*0e*/ 0x07, /*10001110:D.x.P7*//*0f*/ 0xff, /**Not assigned***/
 };
 
 #endif /* X8B10B_TABLES_H_ */

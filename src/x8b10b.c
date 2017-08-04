@@ -1,8 +1,19 @@
-/*
- * x8b10b.c
+/* Copyright 2017 Tania Hagn.
  *
- *  Created on: 02.08.2017
- *      Author: tania
+ * This file is part of x8b10b.
+ *
+ *    Daisy is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    Daisy is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with Daisy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <errno.h>
@@ -17,18 +28,12 @@ static inline void _8b_2_10b(uint8_t u8b, uint16_t *p10b, int *rd)
 {
 	uint16_t abcdeifghj;
 	uint8_t  abcdei, fghj, x, y;
-	int rs;
 
 	x = u8b & ((1<<5)-1); /* 5 bit */
-	abcdei = x5b6b[x] & ((1<<6)-1);
-	rs = (abcdei & (1<<7));
-	if (rs) /*RD sensible*/ {
-		if (*rd < 0) {
+	abcdei = x5b6b[x];
+	if (abcdei & (1<<7)) /*RD sensible*/ {
+		if (*rd < 0)
 			abcdei = ~abcdei;
-			*rd = +1;
-		} else {
-			*rd = -1;
-		}
 		abcdei = abcdei & ((1<<6)-1);
 	}
 
@@ -43,8 +48,7 @@ static inline void _8b_2_10b(uint8_t u8b, uint16_t *p10b, int *rd)
 		}
 	}
 	fghj = x3b4b[y];
-	rs = (fghj & (1<<7));
-	if (rs) /*RD sensible*/ {
+	if (fghj & (1<<7)) /*RD sensible*/ {
 		if (*rd < 0) {
 			fghj = ~fghj;
 			*rd = +1;
@@ -66,7 +70,7 @@ static inline void _8b_2_10b(uint8_t u8b, uint16_t *p10b, int *rd)
 static inline int _10b_2_8b(uint16_t u10b, uint8_t *p8b)
 {
 	uint16_t abcdeifghj;
-	uint8_t  abcdei, fghj, x, y, z;
+	uint8_t  abcdei, fghj, x, y;
 
 	abcdeifghj = u10b & ((1<<10)-1);
 	abcdei = (abcdeifghj >> 4) & ((1<<6)-1);
@@ -80,8 +84,7 @@ static inline int _10b_2_8b(uint16_t u10b, uint8_t *p8b)
 	y =	x4b3b[fghj];
 	if ((x == 0xff) || (y == 0xff)) /* Code not assigned */
 		return 0;
-	z = x | (y << 5);
-	(*p8b) = z;
+	(*p8b) = x | (y << 5);
 	return 1;
 }
 
@@ -103,6 +106,10 @@ int x8b10b(uint8_t *pb_in,  size_t cb_in, uint8_t *pb_out, size_t cb_out)
 		} // end while //
 	} // end while //
 	if (n_bits > 0) {
+		if (u10 & ((1<<(n_bits-1))))
+			u10 = u10 | (0x66 << n_bits);
+		else
+			u10 = u10 | (0x55 << n_bits);
 		if (cb_out == 0)
 			return -E2BIG;
 		*pb_out = (uint8_t)u10; ++result;

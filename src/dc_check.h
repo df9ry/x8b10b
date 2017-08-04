@@ -16,16 +16,12 @@
  *    along with Daisy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DUMP_H_
-#define DUMP_H_
-
-#define dump_bin_lsb(F,P,C) dump_bin(F,P,C,0)
-#define dump_bin_msb(F,P,C) dump_bin(F,P,C,1)
+#ifndef DC_CHECK_H_
+#define DC_CHECK_H_
 
 #include <inttypes.h>
 
-/* Fast dump in a nice format: */
-extern void dump_hex(FILE *file, const uint8_t *pb, uint32_t cb);
-extern void dump_bin(FILE *file, const uint8_t *pb, uint32_t cb, int msb);
+/* Check for longest sequence of 1's or 0's in a sample */
+extern int dc_check(const uint8_t *pb, uint32_t cb, int msb);
 
-#endif /* DUMP_H_ */
+#endif /* DC_CHECK_H_ */
