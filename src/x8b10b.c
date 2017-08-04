@@ -84,9 +84,9 @@ int x8b10b(uint8_t *pb_in,  size_t cb_in, uint8_t *pb_out, size_t cb_out)
 	} // end while //
 	if (n_bits > 0) {
 		if (u10 & ((1<<(n_bits-1))))
-			u10 = u10 | (0x66 << n_bits);
+			u10 = u10 | (0x02 << n_bits);
 		else
-			u10 = u10 | (0x55 << n_bits);
+			u10 = u10 | (0x01 << n_bits);
 		if (cb_out == 0)
 			return -E2BIG;
 		*pb_out = (uint8_t)u10; ++result;
