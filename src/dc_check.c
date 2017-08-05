@@ -23,11 +23,11 @@
 
 #include "dc_check.h"
 
-int dc_check(const uint8_t *pb, uint32_t cb, int msb) {
-	int last_bit = 0, count_bit = 0, max_sequ = 0, k, bit = 0;
+int hipass(const uint8_t *pb, uint32_t cb, int msb) {
+	volatile int last_bit = 0, count_bits = 0, max_sequ = 0, k, bit = 0;
 
-	while (cb-- != 0) {
-		uint8_t x = *pb++;
+	while (cb != 0) {
+		volatile uint8_t x = (*pb); --cb; ++pb;
 
 		for (k = 0; k < 8; ++k) {
 			if (msb)
@@ -35,15 +35,34 @@ int dc_check(const uint8_t *pb, uint32_t cb, int msb) {
 			else
 				bit = ((x & ((1 << k))) != 0x00);
 
+			//fprintf(stdout, "=>C:%d|LB:%d|B:%d\n", count_bits, last_bit, bit);
+
 			if (bit == last_bit) {
-				++count_bit;
-				if (count_bit > max_sequ)
-					max_sequ = count_bit;
+				++count_bits;
+				//fprintf(stdout, "=>C:%d\n", count_bits);
+				if (count_bits > max_sequ)
+					max_sequ = count_bits;
 			} else {
+				count_bits = 1;
+				//fprintf(stdout, "=>C:%d\n", count_bits);
 				last_bit = bit;
-				count_bit = 1;
 			}
 		} // end for //
 	} // end while //
 	return max_sequ;
+}
+
+int lopass(const uint8_t *pb, uint32_t cb) {
+	volatile int k, sum = 0;
+
+	while (cb != 0) {
+		volatile uint8_t x = (*pb); --cb; ++pb;
+
+		for (k = 0; k < 8; ++k)
+			if ((x & (1 << k)) != 0)
+				++sum;
+			else
+				--sum;
+	} // end while //
+	return sum;
 }

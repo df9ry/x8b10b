@@ -22,6 +22,9 @@
 #include <inttypes.h>
 
 /* Check for longest sequence of 1's or 0's in a sample */
-extern int dc_check(const uint8_t *pb, uint32_t cb, int msb);
+extern int hipass(const uint8_t *pb, uint32_t cb, int msb);
+
+/* Check for difference of 1 to 0 bits in the sample */
+extern int lopass(const uint8_t *pb, uint32_t cb);
 
 #endif /* DC_CHECK_H_ */
