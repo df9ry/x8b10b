@@ -60,10 +60,10 @@ static inline void _8b_2_10b(uint8_t u8b, uint16_t *p10b, int *rd)
 
 	if (y == 7) {
 		if ((*rd) < 0) {
-			if ((x == 17) || (x == 18) || (x = 20))
+			if ((x == 17) || (x == 18) || (x == 20))
 					y = 8;
 		} else {
-			if ((x == 11) || (x == 13) || (x = 14))
+			if ((x == 11) || (x == 13) || (x == 14))
 					y = 8;
 		}
 	}
